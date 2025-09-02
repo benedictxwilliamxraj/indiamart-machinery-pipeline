@@ -1,0 +1,26 @@
+import argparse
+from scraper import crawl
+
+DEFAULT_START_URL = "https://export.indiamart.com/search.php?ss=industrial+machinery"
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--start-url", default=DEFAULT_START_URL)
+    parser.add_argument("--max-pages", type=int, default=5)
+    parser.add_argument("--max-products", type=int, default=100)
+    args = parser.parse_args()
+
+    harvested_df, visited_products, visited_pages = crawl(
+        start_url=args.start_url,
+        max_pages=args.max_pages,
+        max_products=args.max_products,
+    )
+
+    print(f"Visited pages: {len(visited_pages)} | products: {len(visited_products)}")
+    if not harvested_df.empty:
+        print(harvested_df.head(3).to_string(index=False))
+    else:
+        print("No rows harvested.")
+
+if __name__ == "__main__":
+    main()
