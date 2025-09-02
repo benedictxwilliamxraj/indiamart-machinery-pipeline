@@ -1,5 +1,9 @@
 import argparse
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
 from scraper import crawl
+
 
 DEFAULT_START_URL = "https://export.indiamart.com/search.php?ss=industrial+machinery"
 
@@ -7,7 +11,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--start-url", default=DEFAULT_START_URL)
     parser.add_argument("--max-pages", type=int, default=5)
-    parser.add_argument("--max-products", type=int, default=100)
+    parser.add_argument("--max-products", type=int, default=50)
     args = parser.parse_args()
 
     harvested_df, visited_products, visited_pages = crawl(
