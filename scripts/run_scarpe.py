@@ -14,7 +14,7 @@ def main():
     parser.add_argument("--max-products", type=int, default=50)
     args = parser.parse_args()
 
-    harvested_df, visited_products, visited_pages = crawl(
+    harvested_df, product_details_df, visited_products, visited_pages = crawl(
         start_url=args.start_url,
         max_pages=args.max_pages,
         max_products=args.max_products,
@@ -23,6 +23,9 @@ def main():
     print(f"Visited pages: {len(visited_pages)} | products: {len(visited_products)}")
     if not harvested_df.empty:
         print(harvested_df.head(3).to_string(index=False))
+        harvested_df.to_csv('/Users/benedictraj/Documents/MyProjects/IndiaMartDataVis/src/storage/harvested_df.csv')
+        product_details_df.to_csv('/Users/benedictraj/Documents/MyProjects/IndiaMartDataVis/src/storage/products.csv')
+
     else:
         print("No rows harvested.")
 
