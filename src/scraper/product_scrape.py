@@ -1,8 +1,12 @@
 import pandas as pd
 import re
-from page_scrape import _try_click_read_more
 from selenium.webdriver.common.by import By
 from urllib.parse import urlparse, parse_qs,urljoin
+
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
+from .page_scrape import _try_click_read_more
 
 def scrape_product_details(driver):
     """
@@ -83,8 +87,10 @@ def scrape_product_details(driver):
         # Name + URL
         try:
             comp_a = croot.find_element(By.XPATH, ".//a[contains(@href,'/company/')]")
-            out["company_name"] = (comp_a.text or "").strip() or croot.find_element(By.XPATH, ".//h2").text.strip()
-            out["company_url"]  = urljoin(BASE, comp_a.get_attribute("href"))
+            out["company_url"] = urljoin(BASE, comp_a.get_attribute("href"))
+            comp_h2 = comp_a.find_element(By.TAG_NAME, "h2")
+            out["company_name"] = comp_h2.text.strip()
+            
         except:
             try:
                 out["company_name"] = croot.find_element(By.XPATH, ".//h2").text.strip()

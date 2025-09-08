@@ -10,7 +10,8 @@ if __name__ == "__main__":
     catalog_c = clean_catalog(catalog)
     details_c = clean_details(details)
 
-    products = build_products(catalog_c, details_c)
+    # products = build_products(catalog_c, details_c)
+    products = details_c
     companies = build_companies(products)
 
     write_processed(products, companies)

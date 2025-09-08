@@ -1,9 +1,13 @@
 import time
 import pandas as pd
+import sys
+import os 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from parsers import parse_one_card
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
+from .parsers import parse_one_card
 
 
 def scroll_to_load_all_cards(driver, card_selector, idle_rounds=3, step_sleep=0.8, max_rounds=40):

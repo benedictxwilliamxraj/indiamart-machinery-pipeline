@@ -1,17 +1,20 @@
-import re
+import sys
+import os 
 import time
 import pandas as pd
-from driver import init_driver
-from page_scrape import scrape_page_data
-from product_scrape import scrape_product_details
-from similar_scrape import scrape_similar_products
 from collections import deque
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selectors import extract_top_row_links
 from selenium.webdriver.support import expected_conditions as EC
 
-def crawl(start_url, max_pages=10, max_products=20, top_row_selector="a.clr4.sgst-lst"):
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
+from .selectors import extract_top_row_links
+from .driver import init_driver
+from .page_scrape import scrape_page_data
+from .product_scrape import scrape_product_details
+from .similar_scrape import scrape_similar_products
+
+def crawl(start_url, max_pages, max_products, top_row_selector="a.clr4.sgst-lst"):
     driver = init_driver()
 
     # Queues & visited
@@ -42,8 +45,8 @@ def crawl(start_url, max_pages=10, max_products=20, top_row_selector="a.clr4.sgs
                 continue
 
             try:
-                if pages_done > 10:
-                    time.sleep(60)
+                if pages_done % 5 == 0:
+                    time.sleep(40)
                 driver.get(page_url)
                 WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
             except Exception as e:
@@ -71,9 +74,10 @@ def crawl(start_url, max_pages=10, max_products=20, top_row_selector="a.clr4.sgs
                 continue
 
             try:
-                if product_processed > 30:
-                    time.sleep(60)
+                if product_processed % 20 == 0:
+                    time.sleep(30)
                 driver.get(purl)
+                product_processed +=1
                 WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
 
             except Exception as e:

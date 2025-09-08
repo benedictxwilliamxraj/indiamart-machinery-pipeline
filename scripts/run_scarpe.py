@@ -10,8 +10,8 @@ DEFAULT_START_URL = "https://export.indiamart.com/search.php?ss=industrial+machi
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--start-url", default=DEFAULT_START_URL)
-    parser.add_argument("--max-pages", type=int, default=5)
-    parser.add_argument("--max-products", type=int, default=50)
+    parser.add_argument("--max-pages", type=int, default=10)
+    parser.add_argument("--max-products", type=int, default=100)
     args = parser.parse_args()
 
     harvested_df, product_details_df, visited_products, visited_pages = crawl(
